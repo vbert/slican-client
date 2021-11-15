@@ -5,15 +5,15 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-11-15, 13:09:15
+Last Modified: 2021-11-15, 21:46:50
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Copyright © 2021 - 2021 by vbert
+Copyright © 2021 by vbert
 """
 import os
 import sys
 
-from lib.rocekpl_api_client.api_client import ApiClient
+from rocekpl_api_client.api_client import ApiClient
 
 try:
     import dotenv
@@ -26,4 +26,6 @@ except ImportError:
 
 api_client = ApiClient()
 
-print(api_client.get_base_url())
+print([
+    api_client.get_all()
+])
