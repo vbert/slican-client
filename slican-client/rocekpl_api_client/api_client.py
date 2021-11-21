@@ -5,11 +5,12 @@ File: /api_client.py
 File Created: 2021-11-15, 12:13:27
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-11-15, 21:57:27
+Last Modified: 2021-11-19, 12:38:52
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
 """
+import re
 import time
 import requests
 
@@ -25,7 +26,7 @@ class ApiClient:
         self.method = 'GET'
         self.endpoint = ''
         self.params = {}
-        self.data = {}
+        self.payload = {}
         self.headers = {}
 
 
@@ -34,8 +35,8 @@ class ApiClient:
         secret = self.config.api_key
         if self.method == 'GET' and len(self.params) > 0:
             params = self.params
-        elif type(self.data) == dict and len(self.data) > 0:
-            params = self.data
+        elif type(self.payload) == dict and len(self.payload) > 0:
+            params = self.payload
         else:
             params = ''
         return signature.create(self.timestamp, secret, params)
@@ -56,17 +57,46 @@ class ApiClient:
         return '/'.join([str(elem) for elem in url])
 
 
-    def get_all(self) -> str:
-        self.method = 'GET'
-        self.endpoint = 'messagesQueue'
-        self.params = {}
-        self.data = {}
-        self.headers = self.get_headers()
+    def response_re(self, text: str) -> str:
+        pattern = '\{(.*}?)\}'
+        finded = re.findall(pattern, text)
+        res = finded[0]
+        return "{%s}" % res
 
-        heads = self.get_headers()
+
+    def get(self) -> str:
+        self.method = 'GET'
         response = requests.get(
             self.get_url(),
-            headers=heads
+            headers=self.get_headers()
         )
+        return self.response_re(response.text)
 
-        return response.text
+
+    def create(self) -> str:
+        self.method = 'POST'
+        response = requests.post(
+            self.get_url(),
+            headers=self.get_headers(),
+            data=self.payload
+        )
+        return self.response_re(response.text)
+
+
+    def update(self) -> str:
+        self.method = 'PUT'
+        response = requests.put(
+            self.get_url(),
+            headers=self.get_headers(),
+            data=self.payload
+        )
+        return self.response_re(response.text)
+
+
+    def delete(self) -> str:
+        self.method = 'DELETE'
+        response = requests.delete(
+            self.get_url(),
+            headers=self.get_headers()
+        )
+        return self.response_re(response.text)
