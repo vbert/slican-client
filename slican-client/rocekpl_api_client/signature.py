@@ -5,12 +5,13 @@ File: /signature.py
 File Created: 2021-11-15, 14:04:28
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-11-15, 21:57:05
+Last Modified: 2021-11-22, 15:49:53
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
 """
 import hashlib
+import urllib.parse
 from typing import Any
 
 
@@ -24,9 +25,10 @@ class Signature:
         temp = []
         temp.append(secret)
         if params is not None:
-            if type(params) == dict:
-                for key, value in sorted(params.items()):
-                    temp.append(f'{key}={value}')
+            if isinstance(params, dict):
+                temp.append(urllib.parse.urlencode(params))
+                # for key, value in sorted(params.items()):
+                #     temp.append(f'{key}={value}')
             else:
                 temp.append(params)
         temp.append(timestamp)
