@@ -5,7 +5,7 @@ File: /signature.py
 File Created: 2021-11-15, 14:04:28
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-11-22, 15:49:53
+Last Modified: 2021-12-05, 23:01:56
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -19,6 +19,7 @@ class Signature:
 
     def __init__(self) -> None:
         pass
+
 
     def create(self, timestamp: int, secret: str, params: Any) -> str:
         separator = '&'

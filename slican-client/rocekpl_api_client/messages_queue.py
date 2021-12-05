@@ -5,7 +5,7 @@ File: /messages_queue.py
 File Created: 2021-11-15, 16:18:16
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-11-19, 12:39:48
+Last Modified: 2021-12-05, 23:50:32
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -15,8 +15,8 @@ from .api_client import ApiClient
 
 class MessagesQueue(ApiClient):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, config) -> None:
+        super().__init__(config)
 
 
     def list(self) -> str:
