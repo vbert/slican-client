@@ -5,14 +5,14 @@ File: /api_config.py
 File Created: 2021-11-15, 12:32:31
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-05, 23:41:52
+Last Modified: 2021-12-07, 18:32:49
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
 """
 import os
 
-class AppConfig:
+class AppConfig(object):
     __instance = None
 
     def getInstance():
@@ -30,9 +30,12 @@ class AppConfig:
         self.hash_algorithm: str = os.getenv('HASH_ALGORITHM')
         self.base_url: str = os.getenv('BASE_URL')
         self.slican_host: str = os.getenv('SLICAN_HOST')
-        self.slican_post: int = os.getenv('SLICAN_PORT')
+        self.slican_port: int = os.getenv('SLICAN_PORT')
+        self.access_key: int = os.getenv('ACCESS_KEY')
         self.pin_sim_card: int = os.getenv('PIN_SIM_CARD')
         self.sender_phone_number: str = os.getenv('SENDER_PHONE_NUMBER')
+        self.system_user_id: str = os.getenv('SYSTEM_USER_ID')
+        self.log_dir: str = os.getenv('LOG_DIR')
         if AppConfig.__instance != None:
             raise Exception("This class is a singleton!")
         else:

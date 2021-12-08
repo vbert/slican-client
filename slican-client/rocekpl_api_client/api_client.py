@@ -5,19 +5,20 @@ File: /api_client.py
 File Created: 2021-11-15, 12:13:27
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-05, 23:18:10
+Last Modified: 2021-12-07, 17:28:09
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
 """
 import re
 import time
+import json
 import requests
 
 from .signature import Signature
 
 
-class ApiClient:
+class ApiClient(object):
 
     def __init__(self, config) -> None:
         self.config = config
@@ -69,7 +70,7 @@ class ApiClient:
             self.get_url(),
             headers=self.get_headers()
         )
-        return self.response_re(response.text)
+        return json.loads(self.response_re(response.text))
 
 
     def create(self) -> str:
@@ -79,7 +80,7 @@ class ApiClient:
             headers=self.get_headers(),
             data=self.payload
         )
-        return self.response_re(response.text)
+        return json.loads(self.response_re(response.text))
 
 
     def update(self) -> str:
@@ -89,7 +90,7 @@ class ApiClient:
             headers=self.get_headers(),
             data=self.payload
         )
-        return self.response_re(response.text)
+        return json.loads(self.response_re(response.text))
 
 
     def delete(self) -> str:
@@ -98,4 +99,4 @@ class ApiClient:
             self.get_url(),
             headers=self.get_headers()
         )
-        return self.response_re(response.text)
+        return json.loads(self.response_re(response.text))

@@ -5,7 +5,7 @@ File: /messages.py
 File Created: 2021-11-22, 15:55:44
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-05, 23:50:17
+Last Modified: 2021-12-07, 12:12:05
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -14,6 +14,11 @@ from .api_client import ApiClient
 
 
 class Messages(ApiClient):
+    STATUS_QUEUED = 'queued'
+    STATUS_SENT = 'sent'
+    STATUS_DELIVERED = 'delivered'
+    STATUS_ERROR = 'error'
+    STATUS_RECIVED = 'received'
 
     def __init__(self, config) -> None:
         super().__init__(config)
@@ -43,6 +48,13 @@ class Messages(ApiClient):
     def update(self, id: int, payload: dict) -> str:
         self.endpoint = 'apiMessages/update'
         self.params = {'id': id}
+        self.payload = payload
+        return super().update()
+
+
+    def byrecipient(self, recipient: str, order_id: int, payload: dict) -> str:
+        self.endpoint = 'apiMessages/byrecipient'
+        self.params = {'recipient': recipient, 'order_id': order_id}
         self.payload = payload
         return super().update()
 

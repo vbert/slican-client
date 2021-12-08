@@ -5,14 +5,14 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-06, 0:43:53
+Last Modified: 2021-12-06, 13:47:34
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
 """
 import os
 
-class Queue:
+class Queue(object):
 
     def __init__(self, config) -> None:
         self.config = config
