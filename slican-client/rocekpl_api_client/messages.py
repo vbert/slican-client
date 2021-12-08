@@ -5,7 +5,7 @@ File: /messages.py
 File Created: 2021-11-22, 15:55:44
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-07, 12:12:05
+Last Modified: 2021-12-08, 8:22:27
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -40,7 +40,7 @@ class Messages(ApiClient):
 
     def create(self, payload: dict) -> str:
         self.endpoint = 'apiMessages/create'
-        self.params = {'id': payload['id']}
+        self.params = {}
         self.payload = payload
         return super().create()
 

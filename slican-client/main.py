@@ -5,7 +5,7 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-07, 18:41:49
+Last Modified: 2021-12-08, 9:05:30
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -39,13 +39,15 @@ def main():
     messages = Messages(config)
     messages_queue = MessagesQueue(config)
 
+    log_format = '%(asctime)s %(levelname)-8s %(name)s - [%(filename)s:%(lineno)d] %(message)s'
     # Log in to the file
     logging.basicConfig(filename=os.path.join(config.log_dir, 'main.log'),
                         filemode='a',
+                        format=log_format,
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.DEBUG)
     # Log in to the scren
-    # logging.basicConfig(format='%(levelname)s - %(name)s - %(asctime)s: %(message)s',
+    # logging.basicConfig(format=log_format,
     #                     datefmt='%Y-%m-%d %H:%M:%S',
     #                     level=logging.DEBUG)
 
@@ -80,8 +82,6 @@ def main():
                         if messages_queue_delete['success'] == False:
                             logging.error(messages_queue_delete)
 
-            commands.run(commands.SOK, report_id=52)
-
             # Handling incoming messages from Slican PBX
             message_incoming = client.recv(1024)
             if message_incoming != commands.EMPTY_FRAME:
@@ -90,40 +90,45 @@ def main():
 
                 if incoming['cmd'] == 'aSMSA':
                     msg_id = messages_sent.pop(0)
-                    msg_update = messages.update(msg_id, {'order_id': incoming['order_id'], 'status': incoming['status']})
-                    logging.info(msg_update)
+                    msg_update = messages.update(
+                        msg_id,
+                        {
+                            'order_id': incoming['order_id'],
+                            'status': incoming['status']
+                        }
+                    )
+                    if msg_update['success'] == False:
+                        logging.error(msg_update)
 
                 if incoming['cmd'] == 'aSMSR':
-                    msg_byrecipient = messages.byrecipient(incoming['recipient'], incoming['order_id'], {'report_id': incoming['report_id'], 'status': incoming['status']})
-                    logging.info(msg_byrecipient)
-                    commands.run(commands.SOK, report_id=incoming['report_id'])
-                    logging.info(commands.SOK)
+                    msg_byrecipient = messages.byrecipient(
+                        incoming['recipient'],
+                        incoming['order_id'],
+                        {
+                            'report_id': incoming['report_id'],
+                            'status': incoming['status']
+                        }
+                    )
+                    if msg_byrecipient['success'] == False:
+                        logging.error(msg_byrecipient)
+                    else:
+                        commands.run(commands.SOK, report_id=incoming['report_id'])
 
                 if incoming['cmd'] == 'aSMSG':
                     msg_create = messages.create({
+                        'direction': '1',
                         'sender': incoming['sender'],
                         'recipient': config.sender_phone_number,
                         'body': incoming['body'],
                         'created_by': config.system_user_id,
-                        'status': incoming['status']
+                        'created_at': ' '.join(incoming['date_time'].split('_')),
+                        'status': incoming['status'],
+                        'report_id': incoming['report_id']
                     })
                     if msg_create['success'] == False:
                         logging.error(msg_create)
-
-                    # tail -f /var/log/exim4/mainlog
-                    # 
-                    # b'aSMSG G001 52 +48502740930 N 0,1,1 2021-12-07_18:03:04 Ok. Jutro przyjad\xa9.\r\n'
-                    # 
-                    # message.create({'id': 4, 'sender': '530644331', 'recipient': '502740930', 'body': 'Kolejna wiadomosc testowa.', 'created_by': 1}),
-                    '''
-                    {
-                        'status': 'received',
-                        'report_id': message[2],
-                        'sender': message[3],
-                        'date_time': message[6],
-                        'body': message[7]
-                    }
-                    '''
+                    else:
+                        commands.run(commands.SOK, report_id=incoming['report_id'])
 
             time.sleep(1)
 
@@ -142,22 +147,6 @@ def main():
     logging.info(commands.run(commands.LOGO))
     client.close()
     logging.info('Disconnecting from the server ')
-
-    # messages_queue.delete(121),
-    # messages_queue.get(125),
-    # messages_queue.list(),
-    # messages_queue.create({'message_id': 126}),
-    # messages_queue.update(126, {'message_id': 121})
-
-    # message = Messages(config)
-    # print('--[msg status]---------------')
-    # print(message.STATUS_SENT)
-
-    # message.delete(4),
-    # message.get(9),
-    # message.list(),
-    # message.create({'id': 4, 'sender': '530644331', 'recipient': '502740930', 'body': 'Kolejna wiadomosc testowa.', 'created_by': 1}),
-    # message.update(4, {'sender': '530644331', 'recipient': '502740930', 'body': f'Wiadomosc testowa {time.time()}', 'created_by': 1})
 
 
 if __name__ == '__main__':
