@@ -36,7 +36,7 @@ setuptools.setup(
     long_description = README,
     long_description_content_type = 'text/markdown',
     license = 'MIT',
-    # url='https://github.com/CITGuru/cver',
-    # download_url='https://github.com/CITGuru/cver/archive/1.0.0.tar.gz',
+    url='https://github.com/vbert/slican-client',
+    download_url='https://github.com/vbert/slican-client/archive/refs/tags/v.1.0.0.tar.gz',
     dependency_links = dependency_links
 )
