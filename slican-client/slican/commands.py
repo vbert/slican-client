@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-11, 20:16:46
+Last Modified: 2021-12-11, 20:42:22
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -102,6 +102,7 @@ class Commands(object):
         else:
             return {
                 'status': 'error',
+                'report_id': message[3],
                 'order_id': message[4],
                 'error_id': message[5],
                 'error': 'SMS nie został dostarczony do odbiorcy.',
