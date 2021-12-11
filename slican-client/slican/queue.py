@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-11, 18:13:05
+Last Modified: 2021-12-11, 20:19:33
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -96,13 +96,22 @@ class Queue(object):
 
         if incoming['cmd'] == 'aSMSA':
             msg_id = self.messages_sent.pop(0)
-            msg_update = messages.update(
-                msg_id,
-                {
-                    'order_id': incoming['order_id'],
-                    'status': incoming['status']
-                }
-            )
+            if incoming['status'] == 'sent':
+                msg_update = messages.update(
+                    msg_id,
+                    {
+                        'order_id': incoming['order_id'],
+                        'status': incoming['status']
+                    }
+                )
+            else:
+                msg_update = messages.update(
+                    msg_id,
+                    {
+                        'status': incoming['status'],
+                        'error_text': f"R{incoming['error_id']} {incoming['error']}"
+                    }
+                )
 
             logging.warning(' - '.join(map(str, self.messages_sent)))
 
@@ -110,14 +119,25 @@ class Queue(object):
                 logging.error(msg_update)
 
         if incoming['cmd'] == 'aSMSR':
-            msg_byrecipient = messages.byrecipient(
-                incoming['recipient'],
-                incoming['order_id'],
-                {
-                    'report_id': incoming['report_id'],
-                    'status': incoming['status']
-                }
-            )
+            if incoming['status'] == 'delivered':
+                msg_byrecipient = messages.byrecipient(
+                    incoming['recipient'],
+                    incoming['order_id'],
+                    {
+                        'report_id': incoming['report_id'],
+                        'status': incoming['status']
+                    }
+                )
+            else:
+                msg_byrecipient = messages.byrecipient(
+                    incoming['recipient'],
+                    incoming['order_id'],
+                    {
+                        'report_id': incoming['report_id'],
+                        'status': incoming['status'],
+                        'error_text': f"E{incoming['error_id']} {incoming['error']}"
+                    }
+                )
             if msg_byrecipient['success'] == False:
                 logging.error(msg_byrecipient)
             else:
