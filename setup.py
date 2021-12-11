@@ -37,6 +37,6 @@ setuptools.setup(
     long_description_content_type = 'text/markdown',
     license = 'MIT',
     url='https://github.com/vbert/slican-client',
-    download_url='https://github.com/vbert/slican-client/archive/refs/tags/v.1.0.0.tar.gz',
+    download_url='https://github.com/vbert/slican-client/archive/refs/tags/v.1.0.1.tar.gz',
     dependency_links = dependency_links
 )
