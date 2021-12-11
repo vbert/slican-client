@@ -5,7 +5,7 @@ File: /messages_queue.py
 File Created: 2021-11-15, 16:18:16
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-05, 23:50:32
+Last Modified: 2021-12-10, 18:24:53
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -20,7 +20,7 @@ class MessagesQueue(ApiClient):
 
 
     def list(self) -> str:
-        self.endpoint = 'messagesQueue'
+        self.endpoint = 'messagesQueue/index'
         self.params = {}
         self.payload = {}
         return super().get()
