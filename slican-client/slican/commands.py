@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-11, 20:42:22
+Last Modified: 2022-02-22, 19:10:14
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -46,7 +46,8 @@ class Commands(object):
             return self.handle_command(decoded_message)
         else:
             return {
-                'cmd': decoded_message[0],
+                'cmd': 'UnknownCommand',
+                'unknown_command': decoded_message[0],
                 'status': 'error',
                 'error': 'Nieznana komenda przychodząca.'
             }

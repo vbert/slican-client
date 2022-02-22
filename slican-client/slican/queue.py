@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-11, 20:19:33
+Last Modified: 2022-02-22, 19:14:20
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -158,3 +158,8 @@ class Queue(object):
                 logging.error(msg_create)
             else:
                 commands.run(commands.SOK, report_id=incoming['report_id'])
+
+        if incoming['cmd'] == 'UnknownCommand':
+            logging.info({
+                'incoming': incoming
+            })

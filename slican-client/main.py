@@ -5,7 +5,7 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-11, 19:53:31
+Last Modified: 2022-02-22, 18:55:07
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -70,6 +70,7 @@ def main():
 
     client, commands, connected = socket_connect(config)
     commands.run(commands.LOGI, pin=config.pin_sim_card)
+    commands.run(commands.LOGA, access_key=config.access_key)
 
     while True:
         try:
