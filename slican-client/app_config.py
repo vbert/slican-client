@@ -5,7 +5,7 @@ File: /api_config.py
 File Created: 2021-11-15, 12:32:31
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-07, 18:32:49
+Last Modified: 2022-02-23, 20:25:17
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -32,6 +32,7 @@ class AppConfig(object):
         self.slican_host: str = os.getenv('SLICAN_HOST')
         self.slican_port: int = os.getenv('SLICAN_PORT')
         self.access_key: int = os.getenv('ACCESS_KEY')
+        self.internal_phone_number: int = os.getenv('INTERNAL_PHONE_NUMBER')
         self.pin_sim_card: int = os.getenv('PIN_SIM_CARD')
         self.sender_phone_number: str = os.getenv('SENDER_PHONE_NUMBER')
         self.system_user_id: str = os.getenv('SYSTEM_USER_ID')

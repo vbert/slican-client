@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-22, 19:14:20
+Last Modified: 2022-02-23, 20:31:04
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -59,9 +59,9 @@ class Queue(object):
 
 
     def process_mailing_list(self, messages_queue, messages, commands) -> bool:
-        messages_list = messages_queue.list()
-        if messages_list['success'] == True:
-            for item in messages_list['data']:
+        message_list = messages_queue.list()
+        if message_list['success'] == True:
+            for item in message_list['data']:
                 msg_id = int(item['message_id'])
                 message_get = messages.get(msg_id)
                 if message_get['success'] == True:
@@ -82,84 +82,91 @@ class Queue(object):
 
     def process_incoming_message(self, message_incoming, messages, commands, config):
         logging.info(message_incoming)
-        incoming = commands.incoming_message(message_incoming)
-
-        if incoming['cmd'] == 'aNA':
-            msg_id = self.messages_sent.pop(0)
-            msg_update = messages.update(
-                msg_id,
-                {
-                    'error_text': incoming['error'],
-                    'status': incoming['status']
-                }
-            )
-
-        if incoming['cmd'] == 'aSMSA':
-            msg_id = self.messages_sent.pop(0)
-            if incoming['status'] == 'sent':
-                msg_update = messages.update(
-                    msg_id,
-                    {
-                        'order_id': incoming['order_id'],
-                        'status': incoming['status']
-                    }
-                )
-            else:
-                msg_update = messages.update(
-                    msg_id,
-                    {
+        
+        message_list = message_incoming.decode(commands.CHARACTER_ENCODING).split(commands.SEPARATOR)
+        for message in message_list:
+            if len(message) > 0:
+                incoming = commands.incoming_message(message)
+                # aNA
+                if incoming['cmd'] == 'aNA':
+                    msg_id = self.messages_sent.pop(0)
+                    msg_update = messages.update(
+                        msg_id,
+                        {
+                            'error_text': incoming['error'],
+                            'status': incoming['status']
+                        }
+                    )
+                # aSMSA
+                if incoming['cmd'] == 'aSMSA':
+                    msg_id = self.messages_sent.pop(0)
+                    if incoming['status'] == 'sent':
+                        msg_update = messages.update(
+                            msg_id,
+                            {
+                                'order_id': incoming['order_id'],
+                                'status': incoming['status']
+                            }
+                        )
+                    else:
+                        msg_update = messages.update(
+                            msg_id,
+                            {
+                                'status': incoming['status'],
+                                'error_text': f"R{incoming['error_id']} {incoming['error']}"
+                            }
+                        )
+                    logging.warning(' - '.join(map(str, self.messages_sent)))
+                    if msg_update['success'] == False:
+                        logging.error(msg_update)
+                # aSMSR
+                if incoming['cmd'] == 'aSMSR':
+                    if incoming['status'] == 'delivered':
+                        msg_byrecipient = messages.byrecipient(
+                            incoming['recipient'],
+                            incoming['order_id'],
+                            {
+                                'report_id': incoming['report_id'],
+                                'status': incoming['status']
+                            }
+                        )
+                    else:
+                        msg_byrecipient = messages.byrecipient(
+                            incoming['recipient'],
+                            incoming['order_id'],
+                            {
+                                'report_id': incoming['report_id'],
+                                'status': incoming['status'],
+                                'error_text': f"E{incoming['error_id']} {incoming['error']}"
+                            }
+                        )
+                    if msg_byrecipient['success'] == False:
+                        logging.error(msg_byrecipient)
+                    else:
+                        commands.run(commands.SOK, report_id=incoming['report_id'])
+                # aSMSG
+                if incoming['cmd'] == 'aSMSG':
+                    msg_create = messages.create({
+                        'direction': '1',
+                        'sender': incoming['sender'],
+                        'recipient': config.sender_phone_number,
+                        'body': incoming['body'],
+                        'created_by': config.system_user_id,
+                        'created_at': ' '.join(incoming['date_time'].split('_')),
                         'status': incoming['status'],
-                        'error_text': f"R{incoming['error_id']} {incoming['error']}"
-                    }
-                )
-
-            logging.warning(' - '.join(map(str, self.messages_sent)))
-
-            if msg_update['success'] == False:
-                logging.error(msg_update)
-
-        if incoming['cmd'] == 'aSMSR':
-            if incoming['status'] == 'delivered':
-                msg_byrecipient = messages.byrecipient(
-                    incoming['recipient'],
-                    incoming['order_id'],
-                    {
-                        'report_id': incoming['report_id'],
-                        'status': incoming['status']
-                    }
-                )
-            else:
-                msg_byrecipient = messages.byrecipient(
-                    incoming['recipient'],
-                    incoming['order_id'],
-                    {
-                        'report_id': incoming['report_id'],
-                        'status': incoming['status'],
-                        'error_text': f"E{incoming['error_id']} {incoming['error']}"
-                    }
-                )
-            if msg_byrecipient['success'] == False:
-                logging.error(msg_byrecipient)
-            else:
-                commands.run(commands.SOK, report_id=incoming['report_id'])
-
-        if incoming['cmd'] == 'aSMSG':
-            msg_create = messages.create({
-                'direction': '1',
-                'sender': incoming['sender'],
-                'recipient': config.sender_phone_number,
-                'body': incoming['body'],
-                'created_by': config.system_user_id,
-                'created_at': ' '.join(incoming['date_time'].split('_')),
-                'status': incoming['status'],
-                'report_id': incoming['report_id']
-            })
-            if msg_create['success'] == False:
-                logging.error(msg_create)
-            else:
-                commands.run(commands.SOK, report_id=incoming['report_id'])
-
-        if incoming['cmd'] == 'UnknownCommand':
-            logging.info({
-                'incoming': incoming
-            })
+                        'report_id': incoming['report_id']
+                    })
+                    if msg_create['success'] == False:
+                        logging.error(msg_create)
+                    else:
+                        commands.run(commands.SOK, report_id=incoming['report_id'])
+                # aRING
+                if incoming['cmd'] == 'aRING':
+                    logging.info({
+                        'incoming': incoming
+                    })
+                # Unknown Command
+                if incoming['cmd'] == 'UnknownCommand':
+                    logging.info({
+                        'incoming': incoming
+                    })

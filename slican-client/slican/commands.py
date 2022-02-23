@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-22, 19:10:14
+Last Modified: 2022-02-23, 20:38:28
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -14,8 +14,13 @@ import socket
 
 class Commands(object):
 
+    # for sms
     INCOMING = ('aOK', 'aERROR', 'aNA', 'aSMSA', 'aSMSG', 'aSMSR')
-    OUTGOING = ('aLOGI', 'aLOGA', 'aLOGO', 'aSMSS', 'aSOK')
+    OUTGOING = ('aLOGI', 'aLOGO', 'aSMSS', 'aSOK')
+    # for phone
+    INCOMING += ('aECHO', 'aRING', 'aREL')
+    OUTGOING += ('aLOGA', )
+
 
     LOGI = "aLOGI G001 {k[pin]}\r\n"
     LOGA = "aLOGA {k[access_key]}\r\n"
@@ -26,6 +31,8 @@ class Commands(object):
     EMPTY_FRAME = b't\r\n'
 
     CHARACTER_ENCODING = 'IBM852'
+    SEPARATOR = '\r\n'
+
 
     def __init__(self, client: socket) -> None:
         self.client = client
@@ -40,16 +47,16 @@ class Commands(object):
         self.client.sendall(bytes(cmd, self.CHARACTER_ENCODING))
 
 
-    def incoming_message(self, message: bytes) -> dict:
-        decoded_message = message.decode(self.CHARACTER_ENCODING).replace('\r\n', '').split(' ', 7)
-        if decoded_message[0] in self.INCOMING:
-            return self.handle_command(decoded_message)
+    def incoming_message(self, message: str) -> dict:
+        message_parts = message.split(' ', 7)
+        if message_parts[0] in self.INCOMING:
+            return self.handle_command(message_parts)
         else:
             return {
                 'cmd': 'UnknownCommand',
-                'unknown_command': decoded_message[0],
+                'unknown_command': message_parts[0],
                 'status': 'error',
-                'error': 'Nieznana komenda przychodząca.'
+                'error': 'Nieznana komenda przychodzaca.'
             }
 
 
@@ -66,13 +73,21 @@ class Commands(object):
             response = self.__command_NA(message)
         elif command == 'aERROR':
             response = self.__command_ERROR(message)
-        elif command == 'aOK' or command == 'aOKaOK':
+        elif command == 'aOK':
             response = self.__command_OK(message)
+        elif command == 'aRING':
+            response = self.__command_RING(message)
         else:
             response = {}
         
         response['cmd'] = command
         return response
+
+
+    def __command_RING(self, message) -> dict:
+        return {
+            'incoming_phone': message[2]
+        }
 
 
     def __command_SMSA(self, message) -> dict:
