@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-23, 20:38:28
+Last Modified: 2022-02-24, 12:49:15
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -18,7 +18,7 @@ class Commands(object):
     INCOMING = ('aOK', 'aERROR', 'aNA', 'aSMSA', 'aSMSG', 'aSMSR')
     OUTGOING = ('aLOGI', 'aLOGO', 'aSMSS', 'aSOK')
     # for phone
-    INCOMING += ('aECHO', 'aRING', 'aREL')
+    INCOMING += ('aECHO', 'aRING', 'aREL', 'aSTAT', 'aDRDY', 'aCONN')
     OUTGOING += ('aLOGA', )
 
 

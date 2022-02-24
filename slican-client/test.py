@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-23, 20:27:53
+Last Modified: 2022-02-24, 12:48:55
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -49,7 +49,10 @@ def main():
     # message_incoming = b'aOK\r\naOK\r\n'
     # message_incoming = b'aSMSA G001 C 28\r\n'
     # message_incoming = b'aREL 101_ 1\r\n'
-    message_incoming = b'aRING 101_ 502740930 5001 530644331 _ _\r\n'
+    # message_incoming = b'aRING 101_ 502740930 5001 530644331 _ _\r\n'
+    # message_incoming = b'aSTAT 101_ H f d l a p c q\r\n'
+    # message_incoming = b'aDRDY 101_\r\n'
+    message_incoming = b'aCONN 101_ 506804780 1001\r\n'
 
     logging.info(f'PROCCESS: {message_incoming}')
 
