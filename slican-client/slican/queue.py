@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-23, 20:31:04
+Last Modified: 2022-02-28, 13:34:58
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -80,7 +80,7 @@ class Queue(object):
             return False
 
 
-    def process_incoming_message(self, message_incoming, messages, commands, config):
+    def process_incoming_message(self, message_incoming, messages, phonecalls, commands, config):
         logging.info(message_incoming)
         
         message_list = message_incoming.decode(commands.CHARACTER_ENCODING).split(commands.SEPARATOR)
@@ -162,9 +162,13 @@ class Queue(object):
                         commands.run(commands.SOK, report_id=incoming['report_id'])
                 # aRING
                 if incoming['cmd'] == 'aRING':
-                    logging.info({
-                        'incoming': incoming
+                    msg_create = phonecalls.create({
+                        'status': '0',
+                        'direction': '1',
+                        'phone_number': incoming['incoming_phone']
                     })
+                    if msg_create['success'] == False:
+                        logging.error(msg_create)
                 # Unknown Command
                 if incoming['cmd'] == 'UnknownCommand':
                     logging.info({

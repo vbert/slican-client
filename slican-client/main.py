@@ -5,7 +5,7 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-22, 18:55:07
+Last Modified: 2022-02-28, 13:09:15
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -21,6 +21,7 @@ from slican.queue import Queue
 from slican.commands import Commands
 from rocekpl_api_client.messages import Messages
 from rocekpl_api_client.messages_queue import MessagesQueue
+from rocekpl_api_client.phonecalls import PhoneCalls
 
 try:
     import dotenv
@@ -54,6 +55,7 @@ def main():
     queue = Queue(config)
     messages = Messages(config)
     messages_queue = MessagesQueue(config)
+    phonecalls = PhoneCalls(config)
 
     # level=logging.{DEBUG INFO WARNING ERROR CRITICAL}
     log_format = '%(asctime)s %(levelname)-8s %(name)s - [%(filename)s:%(lineno)d] %(message)s'
@@ -85,7 +87,7 @@ def main():
             # Handling incoming messages from Slican PBX
             message_incoming = client.recv(1024)
             if message_incoming != commands.EMPTY_FRAME:
-                queue.process_incoming_message(message_incoming, messages, commands, config)
+                queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
 
             time.sleep(1)
 
