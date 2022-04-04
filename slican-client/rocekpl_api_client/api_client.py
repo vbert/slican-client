@@ -5,7 +5,7 @@ File: /api_client.py
 File Created: 2021-11-15, 12:13:27
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2021-12-11, 12:04:00
+Last Modified: 2022-04-04, 19:43:30
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -69,7 +69,7 @@ class ApiClient(object):
         response = requests.get(
             self.get_url(),
             headers=self.get_headers(),
-            verify=False
+            verify=None
         )
         return json.loads(self.response_re(response.text))
 
@@ -80,7 +80,7 @@ class ApiClient(object):
             self.get_url(),
             headers=self.get_headers(),
             data=self.payload,
-            verify=False
+            verify=None
         )
         return json.loads(self.response_re(response.text))
 
@@ -91,7 +91,7 @@ class ApiClient(object):
             self.get_url(),
             headers=self.get_headers(),
             data=self.payload,
-            verify=False
+            verify=None
         )
         return json.loads(self.response_re(response.text))
 
@@ -101,6 +101,6 @@ class ApiClient(object):
         response = requests.delete(
             self.get_url(),
             headers=self.get_headers(),
-            verify=False
+            verify=None
         )
         return json.loads(self.response_re(response.text))
