@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 19:15:38
+Last Modified: 2022-06-10, 19:21:09
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -73,13 +73,12 @@ def main():
     message_incoming = b'aDRDY 10__\r\n'
     # message_incoming = b'aCONN 101_ 506804780 1001\r\n'
 
-    logging.info(f'PROCCESS: {message_incoming}')
-    queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
-
-
     client, commands, connected = socket_connect(config)
     commands.run(commands.LOGI, pin=config.pin_sim_card)
     commands.run(commands.LOGA, access_key=config.access_key)
+
+    logging.info(f'PROCCESS: {message_incoming}')
+    queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
 
     commands_run = 'DIAL'
     logging.info(f'PROCCESS: {commands_run}')
