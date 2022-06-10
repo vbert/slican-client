@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 18:05:40
+Last Modified: 2022-06-10, 18:21:55
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -60,7 +60,13 @@ def main():
     #queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
     commands_run = 'DIAL'
     logging.info(f'PROCCESS: {commands_run}')
-    commands.run(commands.DIAL, recipient='502740930')
+
+    phone_number = {'recipient': '502740930'}
+    
+    print(commands.DIAL)
+    print(phone_number['recipient'])
+
+    commands.run(commands.DIAL, recipient=phone_number['recipient'])
 
 
 

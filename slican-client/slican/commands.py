@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 18:04:35
+Last Modified: 2022-06-10, 18:22:30
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -46,6 +46,9 @@ class Commands(object):
 
     def run(self, command: str, **kwargs) -> None:
         cmd = self.prepare(command, kwargs)
+
+        print(cmd)
+
         self.client.sendall(bytes(cmd, self.CHARACTER_ENCODING))
 
 
