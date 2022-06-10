@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 18:27:13
+Last Modified: 2022-06-10, 18:40:52
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -45,7 +45,7 @@ class Commands(object):
         return command.format(k=kwargs)
 
 
-    def run(self, command: str, **kwargs) -> Any:
+    def run(self, command: str, **kwargs) -> None:
         cmd = self.prepare(command, kwargs)
 
         print(cmd)
