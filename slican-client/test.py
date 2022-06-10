@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 19:05:59
+Last Modified: 2022-06-10, 19:07:18
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -84,7 +84,7 @@ def main():
     commands_run = 'DIAL'
     logging.info(f'PROCCESS: {commands_run}')
 
-    phone_number = '0502740930'
+    phone_number = '502740930'
     commands.run(commands.DIAL, recipient=phone_number)
 
     message_incoming = client.recv(1024)
