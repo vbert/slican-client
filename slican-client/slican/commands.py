@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 18:40:52
+Last Modified: 2022-06-10, 19:00:08
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -29,7 +29,7 @@ class Commands(object):
     SMSS = "aSMSS G001 {k[recipient]} C1 N 167 {k[body]}\r\n"
     SOK = "aSOK G001 {k[report_id]}\r\n"
 
-    DIAL = "aDIAL 101_ {k[recipient]}"
+    DIAL = "aDIAL 10__ {k[recipient]}"
 
     EMPTY_FRAME = b't\r\n'
 

@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 18:54:59
+Last Modified: 2022-06-10, 19:00:14
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -84,8 +84,8 @@ def main():
     commands_run = 'DIAL'
     logging.info(f'PROCCESS: {commands_run}')
 
-    phone_number = {'recipient': '502740930'}
-    commands.run(commands.DIAL, recipient=phone_number['recipient'])
+    phone_number = '502740930'
+    commands.run(commands.DIAL, recipient=phone_number)
 
     message_incoming = client.recv(1024)
     if message_incoming != commands.EMPTY_FRAME:
