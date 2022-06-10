@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-24, 12:49:15
+Last Modified: 2022-06-10, 18:04:35
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -19,7 +19,7 @@ class Commands(object):
     OUTGOING = ('aLOGI', 'aLOGO', 'aSMSS', 'aSOK')
     # for phone
     INCOMING += ('aECHO', 'aRING', 'aREL', 'aSTAT', 'aDRDY', 'aCONN')
-    OUTGOING += ('aLOGA', )
+    OUTGOING += ('aLOGA', 'aDIAL')
 
 
     LOGI = "aLOGI G001 {k[pin]}\r\n"
@@ -27,6 +27,8 @@ class Commands(object):
     LOGO = "aLOGO G001\r\n"
     SMSS = "aSMSS G001 {k[recipient]} C1 N 167 {k[body]}\r\n"
     SOK = "aSOK G001 {k[report_id]}\r\n"
+
+    DIAL = "aDIAL 101_ {k[recipient]}"
 
     EMPTY_FRAME = b't\r\n'
 

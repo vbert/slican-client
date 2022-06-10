@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-03-01, 11:19:33
+Last Modified: 2022-06-10, 18:05:40
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -51,14 +51,17 @@ def main():
     # message_incoming = b'aOK\r\naOK\r\n'
     # message_incoming = b'aSMSA G001 C 28\r\n'
     # message_incoming = b'aREL 101_ 1\r\n'
-    message_incoming = b'aRING 101_ 502740930 5001 530644331 _ _\r\n'
+    # message_incoming = b'aRING 101_ 502740930 5001 530644331 _ _\r\n'
     # message_incoming = b'aSTAT 101_ H f d l a p c q\r\n'
     # message_incoming = b'aDRDY 101_\r\n'
     # message_incoming = b'aCONN 101_ 506804780 1001\r\n'
 
-    logging.info(f'PROCCESS: {message_incoming}')
+    #logging.info(f'PROCCESS: {message_incoming}')
+    #queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
+    commands_run = 'DIAL'
+    logging.info(f'PROCCESS: {commands_run}')
+    commands.run(commands.DIAL, recipient='502740930')
 
-    queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
 
 
 if __name__ == '__main__':
