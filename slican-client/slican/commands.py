@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 19:12:59
+Last Modified: 2022-06-10, 19:17:39
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -100,7 +100,7 @@ class Commands(object):
 
     def __command_DRDY(self, message) -> dict:
         return {
-            'dial_ready': message[1]
+            'dial_ready': message
         }
 
 
