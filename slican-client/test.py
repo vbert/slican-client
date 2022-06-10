@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 19:07:18
+Last Modified: 2022-06-10, 19:15:38
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -64,17 +64,17 @@ def main():
     
     coding = 'IBM852'
     separator = '\r\n'
-    # message_incoming = b'aECHO 101_ 2\r\naECHO 101_ 2\r\naECHO 101_ 6\r\naECHO 101_ 4\r\naECHO 101_ 9\r\n'
+    # message_incoming = b'aECHO 10__ 2\r\naECHO 101_ 2\r\naECHO 101_ 6\r\naECHO 101_ 4\r\naECHO 101_ 9\r\n'
     # message_incoming = b'aOK\r\naOK\r\n'
     # message_incoming = b'aSMSA G001 C 28\r\n'
-    # message_incoming = b'aREL 101_ 1\r\n'
-    # message_incoming = b'aRING 101_ 502740930 5001 530644331 _ _\r\n'
-    # message_incoming = b'aSTAT 101_ H f d l a p c q\r\n'
-    # message_incoming = b'aDRDY 101_\r\n'
+    # message_incoming = b'aREL 10__ 1\r\n'
+    # message_incoming = b'aRING 10__ 502740930 5001 530644331 _ _\r\n'
+    # message_incoming = b'aSTAT 10__ H f d l a p c q\r\n'
+    message_incoming = b'aDRDY 10__\r\n'
     # message_incoming = b'aCONN 101_ 506804780 1001\r\n'
 
-    #logging.info(f'PROCCESS: {message_incoming}')
-    #queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
+    logging.info(f'PROCCESS: {message_incoming}')
+    queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
 
 
     client, commands, connected = socket_connect(config)
