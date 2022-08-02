@@ -5,12 +5,14 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-03-01, 9:59:48
+Last Modified: 2022-08-02, 14:51:06
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
 """
 import os
+import re
+import json
 import logging
 
 class Queue(object):
@@ -18,18 +20,21 @@ class Queue(object):
     # List of IDs of sent messages
     messages_sent = []
 
+    # Phone number patern
+    phone_number_pattert = '[0-9]{9}'
+
     def __init__(self, config) -> None:
         self.config = config
         # self.messages_sent = []
 
 
-    def __file_path(self) -> str:
-        return os.path.join(self.config.data_dir, self.config.messages_queue_file)
+    def __file_path(self, file_name) -> str:
+        return os.path.join(self.config.data_dir, file_name)
 
 
     def __read_timestamp(self) -> int:
         timestamp = 0
-        full_path = self.__file_path()
+        full_path = self.__file_path(self.config.messages_queue_file)
         try:
             file = open(full_path, 'r+')
             timestamp = file.read()
@@ -39,20 +44,46 @@ class Queue(object):
         return int(timestamp)
 
 
-    def check_queue(self) -> bool:
+    def check_message_queue(self) -> bool:
         if self.__read_timestamp() > 0:
             return True
         else:
             return False
 
 
+    def check_phonedial_queue(self) -> str:
+        full_path = self.__file_path(self.config.phonedial_queue_file)
+        try:
+            file = open(full_path, 'r+')
+            phone_number = json.loads(file.read())
+            file.close()
+        except IOError:
+            print(f'Cannot open file ({full_path})')
+
+        validate = re.match(self.phone_number_pattert, phone_number)
+        if validate:
+            return validate.string
+        else:
+            return 'BRAK'
+
+
     def reset_timestamp(self) -> None:
-        full_path = self.__file_path()
+        full_path = self.__file_path(self.config.messages_queue_file)
         try:
             file = open(full_path, 'r+')
             file.seek(0)
             file.truncate()
             file.write('0')
+            file.close()
+        except IOError:
+            print(f'Cannot open file ({full_path})')
+
+
+    def reset_dial_queue(self) -> None:
+        full_path = self.__file_path(self.config.phonedial_queue_file)
+        try:
+            file = open(full_path, 'w+')
+            file.write(json.dumps(''))
             file.close()
         except IOError:
             print(f'Cannot open file ({full_path})')
@@ -78,6 +109,12 @@ class Queue(object):
             return True
         else:
             return False
+
+
+    def process_dial_number(self, phone_number, commands) -> bool:
+        commands.run(commands.DIAL, recipient=phone_number)
+        logging.info(commands.DIAL.format(k={'recipient': phone_number}))
+        return True
 
 
     def process_incoming_message(self, message_incoming, messages, phonecalls, commands, config):

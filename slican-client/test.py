@@ -5,7 +5,7 @@ File: /test.py
 File Created: 2022-02-23, 10:52:23
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 19:21:09
+Last Modified: 2022-08-02, 14:42:45
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 - 2022 by vbert
@@ -97,5 +97,25 @@ def main():
     connected = socket_disconnect(client)
 
 
+def dial():
+    config = AppConfig()
+    queue = Queue(config)
+    
+    log_format = '%(asctime)s %(levelname)-8s %(name)s - [%(filename)s:%(lineno)d] %(message)s'
+    logging.basicConfig(format=log_format,
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        level=logging.DEBUG)
+
+    # Check if there is phone number to dial
+    is_phonedial_queue = queue.check_phonedial_queue()
+
+    logging.info(is_phonedial_queue)
+    
+    if is_phonedial_queue != 'BRAK':
+    #     if queue.process_dial_number(is_phonedial_queue, commands):
+        queue.reset_dial_queue()
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    dial()

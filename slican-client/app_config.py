@@ -5,7 +5,7 @@ File: /api_config.py
 File Created: 2021-11-15, 12:32:31
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-23, 20:25:17
+Last Modified: 2022-08-02, 11:18:26
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -26,6 +26,7 @@ class AppConfig(object):
         """ Virtually private constructor. """
         self.data_dir: str = os.getenv('DATA_DIR')
         self.messages_queue_file: str = os.getenv('MESSGAGES_QUEUE_FILE')
+        self.phonedial_queue_file: str = os.getenv('PHONEDIAL_QUEUE_FILE')
         self.api_key: str = os.getenv('API_KEY')
         self.hash_algorithm: str = os.getenv('HASH_ALGORITHM')
         self.base_url: str = os.getenv('BASE_URL')

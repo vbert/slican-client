@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-06-10, 19:17:39
+Last Modified: 2022-08-02, 13:47:56
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -85,11 +85,17 @@ class Commands(object):
             response = self.__command_RING(message)
         elif command == 'aDRDY':
             response = self.__command_DRDY(message)
+        elif command == 'aDIAL':
+            response = self.__command_DIAL(message)
         else:
             response = {}
         
         response['cmd'] = command
         return response
+
+
+    def __command_DIAL(self, message) -> dict:
+        return {}
 
 
     def __command_RING(self, message) -> dict:

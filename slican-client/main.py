@@ -5,7 +5,7 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-02-28, 13:09:15
+Last Modified: 2022-08-02, 14:24:29
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -77,12 +77,18 @@ def main():
     while True:
         try:
             # Check if there is anything to send
-            is_queue = queue.check_queue()
+            is_message_queue = queue.check_message_queue()
             # and if queue is not empty
-            if(is_queue):
+            if is_message_queue:
                 # process mailing list
-                if(queue.process_mailing_list(messages_queue, messages, commands)):
+                if queue.process_mailing_list(messages_queue, messages, commands):
                     queue.reset_timestamp()
+
+            # Check if there is phone number to dial
+            is_phonedial_queue = queue.check_phonedial_queue()
+            if is_phonedial_queue != 'BRAK':
+                if queue.process_dial_number(is_phonedial_queue, commands):
+                    queue.reset_dial_queue()
 
             # Handling incoming messages from Slican PBX
             message_incoming = client.recv(1024)
