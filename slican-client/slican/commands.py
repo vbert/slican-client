@@ -5,7 +5,7 @@ File: /commands.py
 File Created: 2021-12-06, 13:46:18
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-08-02, 13:47:56
+Last Modified: 2022-09-27, 20:59:39
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -83,6 +83,8 @@ class Commands(object):
             response = self.__command_OK(message)
         elif command == 'aRING':
             response = self.__command_RING(message)
+        elif command == 'aSTAT':
+            response = self.__command_STAT(message)
         elif command == 'aDRDY':
             response = self.__command_DRDY(message)
         elif command == 'aDIAL':
@@ -94,20 +96,32 @@ class Commands(object):
         return response
 
 
-    def __command_DIAL(self, message) -> dict:
-        return {}
-
-
     def __command_RING(self, message) -> dict:
         return {
             'incoming_phone': message[2]
         }
 
 
+    def __command_STAT(self, message) -> dict:
+        off_hook = message[2]
+        if off_hook == 'H':
+            return {
+                'off_hook': 1
+            }
+        else:
+            return {
+                'off_hook': 0
+            }
+
+
     def __command_DRDY(self, message) -> dict:
         return {
             'dial_ready': message
         }
+
+
+    def __command_DIAL(self, message) -> dict:
+        return {}
 
 
     def __command_SMSA(self, message) -> dict:

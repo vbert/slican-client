@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-08-02, 14:51:06
+Last Modified: 2022-09-27, 21:11:18
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -22,6 +22,9 @@ class Queue(object):
 
     # Phone number patern
     phone_number_pattert = '[0-9]{9}'
+
+    # Handset is off hook
+    off_hook = 0
 
     def __init__(self, config) -> None:
         self.config = config
@@ -126,6 +129,7 @@ class Queue(object):
                 incoming = commands.incoming_message(message)
                 # aNA
                 if incoming['cmd'] == 'aNA':
+                    self.off_hook = 0
                     msg_id = self.messages_sent.pop(0)
                     msg_update = messages.update(
                         msg_id,
@@ -134,8 +138,20 @@ class Queue(object):
                             'status': incoming['status']
                         }
                     )
+                # aSTAT
+                if incoming['cmd'] == 'aSTAT':
+                    self.off_hook = incoming['off_hook']
+                # aDRDY
+                if incoming['cmd'] == 'aDRDY' and self.off_hook == 1:
+                    self.off_hook = incoming['off_hook']
+                    # Check if there is phone number to dial
+                    is_phonedial_queue = self.check_phonedial_queue()
+                    if is_phonedial_queue != 'BRAK':
+                        if self.process_dial_number(is_phonedial_queue, commands):
+                            self.reset_dial_queue()
                 # aSMSA
                 if incoming['cmd'] == 'aSMSA':
+                    self.off_hook = 0
                     msg_id = self.messages_sent.pop(0)
                     if incoming['status'] == 'sent':
                         msg_update = messages.update(
@@ -158,6 +174,7 @@ class Queue(object):
                         logging.error(msg_update)
                 # aSMSR
                 if incoming['cmd'] == 'aSMSR':
+                    self.off_hook = 0
                     if incoming['status'] == 'delivered':
                         msg_byrecipient = messages.byrecipient(
                             incoming['recipient'],
@@ -183,6 +200,7 @@ class Queue(object):
                         commands.run(commands.SOK, report_id=incoming['report_id'])
                 # aSMSG
                 if incoming['cmd'] == 'aSMSG':
+                    self.off_hook = 0
                     msg_create = messages.create({
                         'direction': '1',
                         'sender': incoming['sender'],
@@ -199,6 +217,7 @@ class Queue(object):
                         commands.run(commands.SOK, report_id=incoming['report_id'])
                 # aRING
                 if incoming['cmd'] == 'aRING':
+                    self.off_hook = 0
                     msg_create = phonecalls.create({
                         'status': '0',
                         'direction': '1',
@@ -208,6 +227,7 @@ class Queue(object):
                         logging.error(msg_create)
                 # Unknown Command
                 if incoming['cmd'] == 'UnknownCommand':
+                    self.off_hook = 0
                     logging.info({
                         'incoming': incoming
                     })
