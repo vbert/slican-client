@@ -5,7 +5,7 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-08-02, 14:24:29
+Last Modified: 2022-09-27, 19:59:04
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -95,7 +95,7 @@ def main():
             if message_incoming != commands.EMPTY_FRAME:
                 queue.process_incoming_message(message_incoming, messages, phonecalls, commands, config)
 
-            time.sleep(1)
+            time.sleep(0.1)
 
         except socket.error:
             commands.run(commands.LOGO)
