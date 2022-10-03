@@ -5,7 +5,7 @@ File: /slican_client.py
 File Created: 2021-11-15, 11:36:32
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-09-27, 21:13:30
+Last Modified: 2022-10-03, 12:11:46
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert

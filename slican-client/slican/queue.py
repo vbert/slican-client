@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-09-27, 21:11:18
+Last Modified: 2022-10-03, 14:30:17
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -140,9 +140,15 @@ class Queue(object):
                     )
                 # aSTAT
                 if incoming['cmd'] == 'aSTAT':
+
+                    logging.info(incoming)
+
                     self.off_hook = incoming['off_hook']
                 # aDRDY
                 if incoming['cmd'] == 'aDRDY' and self.off_hook == 1:
+
+                    logging.info(incoming)
+
                     self.off_hook = incoming['off_hook']
                     # Check if there is phone number to dial
                     is_phonedial_queue = self.check_phonedial_queue()
