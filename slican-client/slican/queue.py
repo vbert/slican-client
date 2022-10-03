@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-10-03, 14:30:17
+Last Modified: 2022-10-03, 14:37:21
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -141,12 +141,14 @@ class Queue(object):
                 # aSTAT
                 if incoming['cmd'] == 'aSTAT':
 
+                    logging.info('off_hook: {k[off_hook]}'.format(k={'off_hook': self.off_hook}))
                     logging.info(incoming)
 
                     self.off_hook = incoming['off_hook']
                 # aDRDY
                 if incoming['cmd'] == 'aDRDY' and self.off_hook == 1:
 
+                    logging.info('off_hook: {k[off_hook]}'.format(k={'off_hook': self.off_hook}))
                     logging.info(incoming)
 
                     self.off_hook = incoming['off_hook']
