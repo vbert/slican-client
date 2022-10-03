@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-10-03, 14:37:21
+Last Modified: 2022-10-03, 14:43:22
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -146,17 +146,18 @@ class Queue(object):
 
                     self.off_hook = incoming['off_hook']
                 # aDRDY
-                if incoming['cmd'] == 'aDRDY' and self.off_hook == 1:
+                if incoming['cmd'] == 'aDRDY':
 
                     logging.info('off_hook: {k[off_hook]}'.format(k={'off_hook': self.off_hook}))
                     logging.info(incoming)
-
-                    self.off_hook = incoming['off_hook']
-                    # Check if there is phone number to dial
-                    is_phonedial_queue = self.check_phonedial_queue()
-                    if is_phonedial_queue != 'BRAK':
-                        if self.process_dial_number(is_phonedial_queue, commands):
-                            self.reset_dial_queue()
+                    
+                    if self.off_hook == 1:
+                        self.off_hook = incoming['off_hook']
+                        # Check if there is phone number to dial
+                        is_phonedial_queue = self.check_phonedial_queue()
+                        if is_phonedial_queue != 'BRAK':
+                            if self.process_dial_number(is_phonedial_queue, commands):
+                                self.reset_dial_queue()
                 # aSMSA
                 if incoming['cmd'] == 'aSMSA':
                     self.off_hook = 0
