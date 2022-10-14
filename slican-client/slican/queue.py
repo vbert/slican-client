@@ -147,7 +147,7 @@ class Queue(object):
                         self.off_hook = 0
                         # Check if there is phone number to dial
                         is_phonedial_queue = self.check_phonedial_queue()
-                        logging.info('is_phonedial_queue: '.format(k={'recipient': is_phonedial_queue}))
+                        logging.info('is_phonedial_queue: {k[recipient]}'.format(k={'recipient': is_phonedial_queue}))
 
                         if is_phonedial_queue != 'BRAK':
                             if self.process_dial_number(is_phonedial_queue, commands):
