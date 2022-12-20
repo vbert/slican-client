@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-10-03, 15:21:04
+Last Modified: 2022-12-18, 22:20:29
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -13,6 +13,7 @@ Copyright © 2021 by vbert
 import os
 import re
 import json
+import time
 import logging
 
 class Queue(object):
@@ -95,6 +96,7 @@ class Queue(object):
     def process_mailing_list(self, messages_queue, messages, commands) -> bool:
         message_list = messages_queue.list()
         if message_list['success'] == True:
+            timer = 0
             for item in message_list['data']:
                 msg_id = int(item['message_id'])
                 message_get = messages.get(msg_id)
@@ -109,6 +111,13 @@ class Queue(object):
                 messages_queue_delete = messages_queue.delete(msg_id)
                 if messages_queue_delete['success'] == False:
                     logging.error(messages_queue_delete)
+                timer = timer + 1
+                if timer < 4:
+                    sleep = 2
+                else:
+                    timer = 0
+                    sleep = 5
+                time.sleep(sleep)
             return True
         else:
             return False
