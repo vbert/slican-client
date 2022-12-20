@@ -5,7 +5,7 @@ File: /queue.py
 File Created: 2021-12-05, 23:00:01
 Author: Wojciech Sobczak (wsobczak@gmail.com)
 -----
-Last Modified: 2022-12-18, 22:20:29
+Last Modified: 2022-12-20, 17:55:07
 Modified By: Wojciech Sobczak (wsobczak@gmail.com)
 -----
 Copyright © 2021 by vbert
@@ -21,8 +21,8 @@ class Queue(object):
     # List of IDs of sent messages
     messages_sent = []
 
-    # Phone number patern
-    phone_number_pattert = '[0-9]{9}'
+    # Phone number pattern
+    phone_number_pattern = '[0-9]{9}'
 
     # Handset is off hook
     off_hook = 0
@@ -64,7 +64,7 @@ class Queue(object):
         except IOError:
             print(f'Cannot open file ({full_path})')
 
-        validate = re.match(self.phone_number_pattert, phone_number)
+        validate = re.match(self.phone_number_pattern, phone_number)
         if validate:
             return validate.string
         else:
