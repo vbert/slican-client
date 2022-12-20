@@ -113,10 +113,10 @@ class Queue(object):
                     logging.error(messages_queue_delete)
                 timer = timer + 1
                 if timer < 4:
-                    sleep = 2
+                    sleep = 5
                 else:
                     timer = 0
-                    sleep = 5
+                    sleep = 10
                 time.sleep(sleep)
             return True
         else:
