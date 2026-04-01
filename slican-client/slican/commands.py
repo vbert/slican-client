@@ -48,8 +48,6 @@ class Commands(object):
     def run(self, command: str, **kwargs) -> None:
         cmd = self.prepare(command, kwargs)
 
-        print(cmd)
-
         self.client.sendall(bytes(cmd, self.CHARACTER_ENCODING))
 
 
